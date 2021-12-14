@@ -122,46 +122,46 @@ def _setupSSHDImpl(public_key, tunnel, ngrok_token, ngrok_region, mount_gdrive_t
     port = m.group(2)
     ssh_common_options += f" -p {port}"
   elif tunnel == "argotunnel":
-    _download("https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64", "cloudflared")
+    #_download("https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64", "cloudflared")
     #shutil.unpack_archive("cloudflared.tgz")
-    pathlib.Path("cloudflared").chmod(stat.S_IXUSR)
-    cfd_proc = subprocess.Popen(
-        ["./cloudflared", "tunnel", "--url", "ssh://localhost:22", "--logfile", "cloudflared.log", "--metrics", "localhost:49589"],
-        stdout = subprocess.PIPE,
-        universal_newlines = True
-        )
-    time.sleep(4)
+    #pathlib.Path("cloudflared").chmod(stat.S_IXUSR)
+    #cfd_proc = subprocess.Popen(
+        #["./cloudflared", "tunnel", "--url", "ssh://localhost:22", "--logfile", "cloudflared.log", "--metrics", "localhost:49589"],
+       # stdout = subprocess.PIPE,
+        #universal_newlines = True
+        #)
+    #time.sleep(4)
     # Checking if child process has terminated is meaningless because recent version of cloudflared creates new a process and quit soon.
     # if cfd_proc.poll() != None:
     #   raise RuntimeError("Failed to run cloudflared. Return code:" + str(cfd_proc.returncode) + "\nSee clouldflared.log for more info.")
-    hostname = None
+    #hostname = None
     # Sometimes it takes long time to display user host name in cloudflared metrices.
-    for i in range(20):
-      with urllib.request.urlopen("http://127.0.0.1:49589/metrics") as response:
-        text = str(response.read())
-        sub = "\\ncloudflared_tunnel_user_hostnames_counts{userHostname=\"https://"
-        begin = text.find(sub)
-        if begin == -1:
-          time.sleep(10)
+    #for i in range(20):
+     # with urllib.request.urlopen("http://127.0.0.1:49589/metrics") as response:
+      #  text = str(response.read())
+       # sub = "\\ncloudflared_tunnel_user_hostnames_counts{userHostname=\"https://"
+        #begin = text.find(sub)
+        #if begin == -1:
+          #time.sleep(10)
           #print("Retry reading cloudflared user hostname")
-          continue
-        end = text.index("\"", begin + len(sub))
-        hostname = text[begin + len(sub) : end]
-        break
-    if hostname == None:
-      raise RuntimeError("Failed to get user hostname from cloudflared")
-    ssh_common_options += " -oProxyCommand=\"cloudflared access ssh --hostname %h\""
+          #continue
+       # end = text.index("\"", begin + len(sub))
+       # hostname = text[begin + len(sub) : end]
+        #break
+    #if hostname == None:
+      #raise RuntimeError("Failed to get user hostname from cloudflared")
+    #ssh_common_options += " -oProxyCommand=\"cloudflared access ssh --hostname %h\""
 
-  msg += "---\n"
-  if is_VNC:
-    msg += "Execute following command on your local machine and login before running TurboVNC viewer:\n"
-    msg += "✂️"*24 + "\n"
-    msg += f"ssh {ssh_common_options} -L 5901:localhost:5901 {user_name}@{hostname}\n"
-  else:
-    msg += "Command to connect to the ssh server:\n"
-    msg += "✂️"*24 + "\n"
-    msg += f"ssh {ssh_common_options} {user_name}@{hostname}\n"
-    msg += "✂️"*24 + "\n"
+ msg += "---\n"
+  #if is_VNC:
+    #msg += "Execute following command on your local machine and login before running TurboVNC viewer:\n"
+    #msg += "✂️"*24 + "\n"
+   # msg += f"ssh {ssh_common_options} -L 5901:localhost:5901 {user_name}@{hostname}\n"
+ # else:
+   # msg += "Command to connect to the ssh server:\n"
+    #msg += "✂️"*24 + "\n"
+    #msg += f"ssh {ssh_common_options} {user_name}@{hostname}\n"
+    #msg += "✂️"*24 + "\n"
   return msg
 
 def _setupSSHDMain(public_key, tunnel, ngrok_region, check_gpu_available, mount_gdrive_to, mount_gdrive_from, is_VNC):
