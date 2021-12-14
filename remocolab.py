@@ -57,7 +57,7 @@ def _set_public_key(user, public_key):
       shutil.chown(ssh_dir, user)
       shutil.chown(auth_keys_file, user)
 
-def _setupSSHDImpl(public_key, tunnel, ngrok_token, ngrok_region, mount_gdrive_to, mount_gdrive_from, is_VNC):
+def _setupSSHDImpl(public_key, tunnel, ngrok_token, ngrok_region, mount_gdrive_to, mount_gdrive_from):
   subprocess.run(["apt-get", "-q", "update"], check = True)
   subprocess.run(["apt-get", "-q", "-y", "upgrade"], check = True)
 
@@ -162,7 +162,7 @@ def _setupSSHDImpl(public_key, tunnel, ngrok_token, ngrok_region, mount_gdrive_t
     #    msg += "✂️"*24 + "\n"
   #    #    #    #    return msg
 
-def _setupSSHDMain(public_key, tunnel, ngrok_region, check_gpu_available, mount_gdrive_to, mount_gdrive_from, is_VNC):
+def _setupSSHDMain(public_key, tunnel, ngrok_region, check_gpu_available, mount_gdrive_to, mount_gdrive_from):
   if check_gpu_available and not _check_gpu_available():
     return (False, "")
 
@@ -216,7 +216,7 @@ def _setupSSHDMain(public_key, tunnel, ngrok_region, check_gpu_available, mount_
      #     print("in - India (Mumbai)")
       #    ngrok_region = region = input()
 
-  return (True, _setupSSHDImpl(public_key,  mount_gdrive_to, mount_gdrive_from, is_VNC))
+  return (True, _setupSSHDImpl(public_key,  mount_gdrive_to, mount_gdrive_from))
 
 def setupSSHD(check_gpu_available = False, mount_gdrive_to = None, mount_gdrive_from = None, public_key = None):
   s, msg = _setupSSHDMain(public_key,  check_gpu_available, mount_gdrive_to, mount_gdrive_from, False)
