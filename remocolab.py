@@ -216,10 +216,10 @@ def _setupSSHDMain(public_key, tunnel, ngrok_region, check_gpu_available, mount_
      #     print("in - India (Mumbai)")
       #    ngrok_region = region = input()
 
-  return (True, _setupSSHDImpl(public_key, tunnel, ngrok_token, ngrok_region, mount_gdrive_to, mount_gdrive_from, is_VNC))
+  return (True, _setupSSHDImpl(public_key,  mount_gdrive_to, mount_gdrive_from, is_VNC))
 
-def setupSSHD(ngrok_region = None, check_gpu_available = False, tunnel = None, mount_gdrive_to = None, mount_gdrive_from = None, public_key = None):
-  s, msg = _setupSSHDMain(public_key, tunnel, ngrok_region, check_gpu_available, mount_gdrive_to, mount_gdrive_from, False)
+def setupSSHD(check_gpu_available = False, mount_gdrive_to = None, mount_gdrive_from = None, public_key = None):
+  s, msg = _setupSSHDMain(public_key,  check_gpu_available, mount_gdrive_to, mount_gdrive_from, False)
   print(msg)
 
 def _setup_nvidia_gl():
