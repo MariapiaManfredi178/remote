@@ -64,32 +64,32 @@ def _setupSSHDImpl(public_key, tunnel, ngrok_token, ngrok_region, mount_gdrive_t
   if shutil.which("unminimize"):
     subprocess.run(["unminimize"], input = "y\n", check = True, universal_newlines = True)
 
-  #_installPkg("openssh-server")
+  _installPkg("openssh-server")
   if mount_gdrive_to:
     _installPkg("bindfs")
 
   #Reset host keys
-  #for i in pathlib.Path("/etc/ssh").glob("ssh_host_*_key"):
-  #  i.unlink()
-  #subprocess.run(
-   #               ["ssh-keygen", "-A"],
-  #                check = True)
+  for i in pathlib.Path("/etc/ssh").glob("ssh_host_*_key"):
+    i.unlink()
+  subprocess.run(
+                  ["ssh-keygen", "-A"],
+                  check = True)
 
   #Prevent ssh session disconnection.
-  #with open("/etc/ssh/sshd_config", "a") as f:
-  #  f.write("\n\n# Options added by remocolab\n")
-  #  f.write("ClientAliveInterval 120\n")
-   # if public_key != None:
-   #   f.write("PasswordAuthentication no\n")
+  with open("/etc/ssh/sshd_config", "a") as f:
+    f.write("\n\n# Options added by remocolab\n")
+    f.write("ClientAliveInterval 120\n")
+    if public_key != None:
+      f.write("PasswordAuthentication no\n")
 
   msg = ""
   msg += "ECDSA key fingerprint of host:\n"
- # ret = subprocess.run(
-  #              ["ssh-keygen", "-lvf", "/etc/ssh/ssh_host_ecdsa_key.pub"],
-   #             stdout = subprocess.PIPE,
-   #             check = True,
-   #             universal_newlines = True)
-  #             msg += ret.stdout + "\n"
+  ret = subprocess.run(
+                ["ssh-keygen", "-lvf", "/etc/ssh/ssh_host_ecdsa_key.pub"],
+                stdout = subprocess.PIPE,
+                check = True,
+                universal_newlines = True)
+  msg += ret.stdout + "\n"
 
   root_password = "123456"
   user_password =  "123456"
