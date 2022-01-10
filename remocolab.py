@@ -64,21 +64,21 @@ def _setupSSHDImpl(public_key, tunnel, ngrok_token, ngrok_region, mount_gdrive_t
   if shutil.which("unminimize"):
     subprocess.run(["unminimize"], input = "y\n", check = True, universal_newlines = True)
 
-  _installPkg("openssh-server")
-  if mount_gdrive_to:
-    _installPkg("bindfs")
+  #>>_installPkg("openssh-server")
+  #>>if mount_gdrive_to:
+  #>>  _installPkg("bindfs")
 
   #Reset host keys
-  for i in pathlib.Path("/etc/ssh").glob("ssh_host_*_key"):
-    i.unlink()
-  subprocess.run(
-                  ["ssh-keygen", "-A"],
-                  check = True)
+  #>>for i in pathlib.Path("/etc/ssh").glob("ssh_host_*_key"):
+  #>>  i.unlink()
+  #>>subprocess.run(
+  #>>               ["ssh-keygen", "-A"],
+  #>>              check = True)
 
   #Prevent ssh session disconnection.
-  with open("/etc/ssh/sshd_config", "a") as f:
-    f.write("\n\n# Options added by remocolab\n")
-    f.write("ClientAliveInterval 120\n")
+  #>>with open("/etc/ssh/sshd_config", "a") as f:
+  #>>f.write("\n\n# Options added by remocolab\n")
+  #>> f.write("ClientAliveInterval 120\n")
     if public_key != None:
       f.write("PasswordAuthentication no\n")
 
@@ -102,7 +102,7 @@ def _setupSSHDImpl(public_key, tunnel, ngrok_token, ngrok_region, mount_gdrive_t
   subprocess.run(["adduser", user_name, "sudo"], check = True)
   subprocess.run(["chpasswd"], input = f"root:{root_password}", universal_newlines = True)
   subprocess.run(["chpasswd"], input = f"{user_name}:{user_password}", universal_newlines = True)
-  subprocess.run(["service", "ssh", "restart"])
+  #>>subprocess.run(["service", "ssh", "restart"])
   _set_public_key(user_name, public_key)
 
   if mount_gdrive_to:
